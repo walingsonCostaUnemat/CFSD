@@ -153,7 +153,7 @@ def gerar_tabelas_excepcionalidades(data):
     justificativa_col = 'Justificativa' if 'Justificativa' in data.columns else next(col for col in data.columns if 'justificativa' in col.lower())
     
     # Filtrar alunos com palavras-chave nas justificativas
-    palavras_chave = ['concurso', 'efetiva', 'TDH', 'autismo', 'doença']
+    palavras_chave = ['concurso', 'efetiva', 'TDAH', 'autismo', 'doença']
     excepcionalidades = data[data[justificativa_col].str.contains('|'.join(palavras_chave), case=False, na=False)]
     
     # Exibir tabela
