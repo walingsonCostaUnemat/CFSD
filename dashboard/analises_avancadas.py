@@ -224,7 +224,7 @@ def titulos(data):
 
     # Substituir "Não", "Nao", "Nao possui doutorado." e valores vazios por "-"
     def limpar_titulos(titulo):
-        if pd.isna(titulo) or 'não' in str(titulo).lower() or 'nao' in str(titulo).lower() or 'nao possui doutorado' in str(titulo).lower():
+        if pd.isna(titulo) or 'não' in str(titulo).lower() or 'nenhuma' in str(titulo).lower() or 'nao' in str(titulo).lower() or 'nao possui doutorado' in str(titulo).lower():
             return ' - '
         return titulo
 
