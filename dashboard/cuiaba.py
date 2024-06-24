@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from dashboard.analises_avancadas import clusterizacao, analise_rede, mapas_de_calor
+from dashboard.analises_avancadas import clusterizacao, analise_rede, mapas_de_calor, titulos
 
 def carregar_dados(file_path):
     data = pd.read_csv(file_path)
@@ -104,12 +104,14 @@ def gerar_relatorio():
     # Perfil Demográfico
     perfil_demografico(data)
     
+    
     st.markdown("""
     ## Análises Avançadas
     """)
     
     # Chamar as funções de análises avançadas
     clusterizacao(data)
+    titulos(data)
     analise_rede(data)
     mapas_de_calor(data)
     
