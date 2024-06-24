@@ -153,7 +153,7 @@ def gerar_tabelas_excepcionalidades(data):
     justificativa_col = 'Justificativa' if 'Justificativa' in data.columns else next(col for col in data.columns if 'justificativa' in col.lower())
     
     # Filtrar alunos com palavras-chave nas justificativas
-    palavras_chave = ['concurso', 'efetiva', 'TDAH', 'autismo', 'doença']
+    palavras_chave = ['concurso', 'efetiva', 'TDAH', 'autismo', 'doença','tdah', 'tdh']
     excepcionalidades = data[data[justificativa_col].str.contains('|'.join(palavras_chave), case=False, na=False)]
     
     # Exibir tabela
@@ -166,7 +166,7 @@ def gerar_relacao_alunos(data):
     
     st.markdown("""
     ## Excepcionalidades
-    Abaixo estão listados os militares que possuem cônjuges efetivos no município e/ou dependentes que necessitam de cuidados especiais, como TDH e Autismo. 
+    Abaixo estão listados os militares que possuem cônjuges efetivos no município e/ou dependentes que necessitam de cuidados especiais, como TDAH e Autismo. 
     """)
 
     # Verifique o nome correto da coluna de justificativas no CSV
