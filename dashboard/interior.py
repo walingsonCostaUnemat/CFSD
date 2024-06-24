@@ -179,7 +179,7 @@ def gerar_relacao_alunos(data):
         return
 
     # Filtrar alunos com justificativas que indicam excepcionalidades
-    palavras_chave = ['concurso', 'efetiva', 'tdh', 'autismo', 'doença']
+    palavras_chave = ['concurso', 'efetiva', 'TDAH', 'autismo', 'doença', 'tdah']
     excepcionalidades = data[data[col_justificativa].str.contains('|'.join(palavras_chave), case=False, na=False)]
     
     # Exibir tabela de excepcionalidades
