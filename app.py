@@ -44,13 +44,14 @@ escolha_local = st.sidebar.radio("Selecione a Localidade", ["Capital", "Interior
 if escolha_local == "Interior":
     modulo = st.sidebar.selectbox("Selecione o Módulo", ["Relatório do Interior", "Escolhas de Cidade por Pelotão", "Selecionar Colunas e Aplicar Filtros", "Distribuição de Alunos por Cidades"])
     if modulo == "Relatório do Interior":
-        distribuicao_cidades(data)
+        gerar_relatorio_interior()
+        
     elif modulo == "Escolhas de Cidade por Pelotão":
         escolhas_por_pelotao(data)
     elif modulo == "Selecionar Colunas e Aplicar Filtros":
         selecionar_colunas(data)
     elif modulo == "Distribuição de Alunos por Cidades":
-        gerar_relatorio_interior()
+        distribuicao_cidades(data)
 elif escolha_local == "Capital":
     modulo = st.sidebar.selectbox("Selecione o Módulo", ["Relatório Cuiabá", "Filtros personalizados"])
     if modulo == "Filtros personalizados":
