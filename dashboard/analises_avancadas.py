@@ -214,6 +214,43 @@ def mapas_de_calor(data):
     else:
         st.warning("Não há dados para gerar o mapa de calor para a graduação selecionada.")
 
+def titulos(data):
+    st.header("Militares com Títulos Acadêmicos")
+    st.markdown("""
+    ### Contextualização
+    Este relatório apresenta os militares que possuem títulos acadêmicos, incluindo especialização, mestrado e doutorado.
+    A importância de identificar esses militares com títulos avançados é crucial para a alocação estratégica de funções que requerem conhecimentos especializados.
+    """)
+
+    # Substituir "Não", "Nao", "Nao possui doutorado." e valores vazios por "-"
+    def limpar_titulos(titulo):
+        if pd.isna(titulo) or 'não' in str(titulo).lower() or 'nao' in str(titulo).lower() or 'nao possui doutorado' in str(titulo).lower():
+            return ' - '
+        return titulo
+
+    titulos_cols = ['Especialização', 'Mestrado', 'Doutorado']
+    for col in titulos_cols:
+        data[col] = data[col].apply(limpar_titulos)
+
+    # Filtrar militares que possuem pelo menos uma especialização, mestrado ou doutorado válida
+    titulos_data = data[
+        (data['Especialização'] != ' - ') |
+        (data['Mestrado'] != ' - ') |
+        (data['Doutorado'] != ' - ')
+    ]
+
+    # Selecionar as colunas relevantes
+    cols_titulos = ['Classificação no CFSD', 'Nome de Guerra', 'Graduação', 'Especialização', 'Mestrado', 'Doutorado']
+    titulos_data = titulos_data[cols_titulos]
+
+    # Ordenar por Doutorado, Mestrado, Especialização e Classificação no CFSD
+    titulos_data = titulos_data.sort_values(by=['Doutorado', 'Mestrado', 'Especialização', 'Classificação no CFSD'], ascending=[False, False, False, True])
+
+    # Definir a classificação como índice
+    titulos_data.set_index('Classificação no CFSD', inplace=True)
+
+    # Exibir a tabela
+    st.dataframe(titulos_data)
 # Chamada da função com o dataframe de dados
 # data = carregar_dados('caminho/para/seu/arquivo.csv')
 # mapas_de_calor(data)
