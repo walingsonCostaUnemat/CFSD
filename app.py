@@ -29,22 +29,41 @@ def pagina_principal():
 
 # Carregar os dados
 file_path = 'escolha.csv'
-data = pd.read_csv(file_path)
 
-# Transformar 'Nome de Guerra' para maiúsculo
-if 'Nome de Guerra' in data.columns:
-    data['Nome de Guerra'] = data['Nome de Guerra'].str.upper()
+
+def carregar_dados(file_path):
+    def formatar_telefone(numero):
+        """
+        Formata um número de telefone para o formato (99)99999-9999 ou (99)9999-9999.
+
+        Args:
+        numero (str): Número de telefone a ser formatado.
+
+        Returns:
+        str: Número de telefone formatado.
+        """
+        numero_str = ''.join(filter(str.isdigit, str(numero)))  # Remove caracteres não numéricos
+        if len(numero_str) == 11:
+            return f"({numero_str[:2]}){numero_str[2:7]}-{numero_str[7:]}"
+        elif len(numero_str) == 10:
+            return f"({numero_str[:2]}){numero_str[2:6]}-{numero_str[6:]}"
+        else:
+            return numero  # Retorna o número original se não tiver o tamanho esperado
+
+    data = pd.read_csv(file_path)
     
+    if 'Telefone DDD' in data.columns:
+        data['Telefone DDD'] = data['Telefone DDD'].apply(formatar_telefone)
+    
+    return data
+
+data = carregar_dados(file_path)
 # Ajustar o nome da coluna "Justificativa "
 if "Justificativa " in data.columns:
     data = data.rename(columns={"Justificativa ": "Justificativa"})
 
 # Limpar os nomes das cidades
 data['Cidades Limpo'] = data['Cidades'].apply(lambda nome: nome.split(" - ")[1] if len(nome.split(" - ")) > 1 else nome.split(" - ")[0])
-
-# Transformar 'Nome de Guerra' para maiúsculo
-if 'Nome de Guerra' in data.columns:
-    data['Nome de Guerra'] = data['Nome de Guerra'].str.upper()
 
 st.sidebar.title("Navegação")
 escolha_local = st.sidebar.radio("Selecione a Localidade", ["Capital", "Interior"])
