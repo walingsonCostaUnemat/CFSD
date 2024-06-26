@@ -31,6 +31,10 @@ def pagina_principal():
 file_path = 'escolha.csv'
 data = pd.read_csv(file_path)
 
+# Transformar 'Nome de Guerra' para maiúsculo
+if 'Nome de Guerra' in data.columns:
+    data['Nome de Guerra'] = data['Nome de Guerra'].str.upper()
+    
 # Ajustar o nome da coluna "Justificativa "
 if "Justificativa " in data.columns:
     data = data.rename(columns={"Justificativa ": "Justificativa"})
