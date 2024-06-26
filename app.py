@@ -27,18 +27,20 @@ def pagina_principal():
     Use a barra lateral para navegar pelos módulos.
     """)
 
-def carregar_dados(file_path):
-    data = pd.read_csv(file_path)
-    # Forçar a coluna 'Nome de Guerra' a ficar em maiúsculo
-    data['Nome de Guerra'] = data['Nome de Guerra'].str.upper()
-    return data
-    
+# Carregar os dados
+file_path = 'escolha.csv'
+data = pd.read_csv(file_path)
+
 # Ajustar o nome da coluna "Justificativa "
 if "Justificativa " in data.columns:
     data = data.rename(columns={"Justificativa ": "Justificativa"})
 
 # Limpar os nomes das cidades
 data['Cidades Limpo'] = data['Cidades'].apply(lambda nome: nome.split(" - ")[1] if len(nome.split(" - ")) > 1 else nome.split(" - ")[0])
+
+# Transformar 'Nome de Guerra' para maiúsculo
+if 'Nome de Guerra' in data.columns:
+    data['Nome de Guerra'] = data['Nome de Guerra'].str.upper()
 
 st.sidebar.title("Navegação")
 escolha_local = st.sidebar.radio("Selecione a Localidade", ["Capital", "Interior"])
