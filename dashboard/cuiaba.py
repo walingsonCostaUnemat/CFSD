@@ -1,32 +1,10 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from dashboard.analises_avancadas import clusterizacao, analise_rede, mapas_de_calor, titulos
+from dashboard.analises_avancadas import clusterizacao, analise_rede, mapas_de_calor, titulos, musico
 
 def carregar_dados(file_path):
-    def formatar_telefone(numero):
-        """
-        Formata um número de telefone para o formato (99)99999-9999 ou (99)9999-9999.
-
-        Args:
-        numero (str): Número de telefone a ser formatado.
-
-        Returns:
-        str: Número de telefone formatado.
-        """
-        numero_str = ''.join(filter(str.isdigit, str(numero)))  # Remove caracteres não numéricos
-        if len(numero_str) == 11:
-            return f"({numero_str[:2]}){numero_str[2:7]}-{numero_str[7:]}"
-        elif len(numero_str) == 10:
-            return f"({numero_str[:2]}){numero_str[2:6]}-{numero_str[6:]}"
-        else:
-            return numero  # Retorna o número original se não tiver o tamanho esperado
-
     data = pd.read_csv(file_path)
-    
-    if 'Telefone DDD' in data.columns:
-        data['Telefone DDD'] = data['Telefone DDD'].apply(formatar_telefone)
-    
     return data
 
 def resumo_geral(data):
@@ -134,6 +112,7 @@ def gerar_relatorio():
     # Chamar as funções de análises avançadas
     clusterizacao(data)
     titulos(data)
+    musico()
     analise_rede(data)
     mapas_de_calor(data)
     
