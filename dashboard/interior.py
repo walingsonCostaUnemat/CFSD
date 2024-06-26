@@ -227,11 +227,12 @@ def gerar_relatorio_interior():
     # Seções do relatório
     introducao()
     resumo_geral(data)
-    perfil_demografico(data)
-    mapas_de_calor(data)   
+       
     gerar_relacao_alunos(data)
     gerar_tabelas_excepcionalidades(data)
     gerar_tabelas_municipios(data)
+    perfil_demografico(data)
+    mapas_de_calor(data)
 
 # Chamada da função principal para gerar o relatório
 if __name__ == "__main__":
