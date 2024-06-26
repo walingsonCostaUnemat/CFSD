@@ -6,7 +6,11 @@ from dashboard.analises_avancadas import clusterizacao, analise_rede, mapas_de_c
 def carregar_dados(file_path):
     data = pd.read_csv(file_path)
     return data
-
+    
+# Transformar 'Nome de Guerra' para maiúsculo
+if 'Nome de Guerra' in data.columns:
+    data['Nome de Guerra'] = data['Nome de Guerra'].str.upper()
+    
 def resumo_geral(data):
     st.header("Resumo Geral")
     
