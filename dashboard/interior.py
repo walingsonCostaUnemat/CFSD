@@ -175,7 +175,7 @@ def gerar_tabelas_excepcionalidades(data):
     justificativa_col = 'Justificativa' if 'Justificativa' in data.columns else next(col for col in data.columns if 'justificativa' in col.lower())
     
     # Filtrar alunos com palavras-chave nas justificativas
-    palavras_chave = ['concurso', 'efetiva', 'TDAH', 'autismo', 'doença','Concurso','concursada', 'concursado','Autismo']
+    palavras_chave = ['concurso', 'efetiva', 'TDH', 'autismo', 'doença']
     excepcionalidades = data[data[justificativa_col].str.contains('|'.join(palavras_chave), case=False, na=False)]
     
     # Exibir tabela
@@ -201,10 +201,12 @@ def gerar_relacao_alunos(data):
         return
 
     # Filtrar alunos com justificativas que indicam excepcionalidades
-    palavras_chave = ['concurso', 'efetiva', 'tdh', 'autismo', 'doença']
+    palavras_chave = ['concurso', 'efetiva', 'TDAH', 'autismo', 'doença','Concurso','concursada']
+    
     excepcionalidades = data[data[col_justificativa].str.contains('|'.join(palavras_chave), case=False, na=False)]
     
     # Exibir tabela de excepcionalidades
+    
     cols_excepcionalidades = ['Nome de Guerra', 'Cidades', 'Telefone DDD', col_justificativa]
     st.subheader("Tabela de Excepcionalidades")
     st.dataframe(excepcionalidades[cols_excepcionalidades])
@@ -227,12 +229,11 @@ def gerar_relatorio_interior():
     # Seções do relatório
     introducao()
     resumo_geral(data)
-       
     gerar_relacao_alunos(data)
     gerar_tabelas_excepcionalidades(data)
     gerar_tabelas_municipios(data)
     perfil_demografico(data)
-    mapas_de_calor(data)
+    mapas_de_calor(data) 
 
 # Chamada da função principal para gerar o relatório
 if __name__ == "__main__":
