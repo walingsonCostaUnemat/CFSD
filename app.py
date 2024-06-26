@@ -65,13 +65,6 @@ def pagina_principal():
     Este aplicativo tem como objetivo analisar e visualizar as preferências de cidade dos alunos de acordo com suas escolhas e classificações. 
     Você pode navegar pelos diferentes módulos disponíveis para visualizar as distribuições de alunos por cidades, escolhas de cidade por pelotão e selecionar e filtrar colunas específicas.
     
-    ### Módulos Disponíveis:
-    - **Distribuição de Alunos por Cidades**: Visualize a distribuição dos alunos nas diferentes cidades.
-    - **Escolhas de Cidade por Pelotão**: Visualize as escolhas de cidade divididas por pelotão.
-    - **Selecionar Colunas e Aplicar Filtros**: Selecione e filtre colunas específicas para uma análise detalhada.
-    - **Interesses em Cuiabá e Várzea Grande**: Visualize os alunos interessados em Cuiabá e Várzea Grande.
-    - **Relatório de Cuiabá e Várzea Grande**: Relatório detalhado sobre as preferências dos militares em Cuiabá e Várzea Grande.
-    - **Relatório do Interior**: Relatório detalhado sobre as preferências dos militares no interior de MT.
     
     Use a barra lateral para navegar pelos módulos.
     """)
