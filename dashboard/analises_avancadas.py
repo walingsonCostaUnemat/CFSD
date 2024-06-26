@@ -111,13 +111,9 @@ def analise_rede(data):
 
     # Adicionando nós e arestas
     for i, row in data.iterrows():
-        nome_guerra = str(row['Nome de Guerra'])
-        nova_categoria_graduacao = str(row['Nova Categoria Graduação'])
-        categoria_experiencia = str(row['Categoria Experiência'])
-        
-        G.add_node(nome_guerra, title=nome_guerra)
-        G.add_edge(nova_categoria_graduacao, nome_guerra)
-        G.add_edge(categoria_experiencia, nome_guerra)
+        G.add_node(row['Nome de Guerra'], title=row['Nome de Guerra'])
+        G.add_edge(row['Nova Categoria Graduação'], row['Nome de Guerra'])
+        G.add_edge(row['Categoria Experiência'], row['Nome de Guerra'])
 
     # Gerar a rede usando pyvis
     net = Network(notebook=True, height="750px", width="100%", bgcolor="#ffffff", font_color="black")
@@ -136,6 +132,7 @@ def analise_rede(data):
     with open(html_file_path, 'r', encoding='utf-8') as f:
         html_content = f.read()
     components.html(html_content, height=750)
+
 
 import folium
 from streamlit_folium import st_folium
@@ -227,7 +224,7 @@ def titulos(data):
 
     # Substituir "Não", "Nao", "Nao possui doutorado." e valores vazios por "-"
     def limpar_titulos(titulo):
-        if pd.isna(titulo) or 'não' in str(titulo).lower() or 'nenhuma' in str(titulo).lower() or 'nao' in str(titulo).lower() or 'nao possui doutorado' in str(titulo).lower():
+        if pd.isna(titulo) or 'não' in str(titulo).lower() or 'nao' in str(titulo).lower() or 'nao possui doutorado' in str(titulo).lower():
             return ' - '
         return titulo
 
@@ -257,3 +254,26 @@ def titulos(data):
 # Chamada da função com o dataframe de dados
 # data = carregar_dados('caminho/para/seu/arquivo.csv')
 # mapas_de_calor(data)
+def musico():
+    # Carregar os dados
+    file_path = 'musicos.csv'
+    data = pd.read_csv(file_path)
+
+    # Forçar a coluna "Nome de Guerra" a ficar toda em maiúsculas
+    if 'Nome de Guerra' in data.columns:
+        data['Nome de Guerra'] = data['Nome de Guerra'].str.upper()
+
+    # Renomear a coluna "Tem interesse de tocar na banda do CBM?" para "Interesse na Banda BM"
+    if 'Tem interesse de tocar na banda do CBM?' in data.columns:
+        data = data.rename(columns={'Tem interesse de tocar na banda do CBM?': 'Interesse na Banda BM'})
+
+    # Explicação
+    st.header("Habilidades Musicais dos Militares")
+    st.markdown("""
+    Alguns militares possuem habilidades de canto e instrumentos musicais.
+    Abaixo está uma tabela detalhando as habilidades musicais desses militares, incluindo o interesse em tocar na banda do Corpo de Bombeiros Militar (CBM).
+    """)
+
+    # Exibir a tabela
+    cols = ['Nome de Guerra', 'Habilidade musical', 'Instrumento', 'Interesse na Banda BM']
+    st.dataframe(data[cols])
