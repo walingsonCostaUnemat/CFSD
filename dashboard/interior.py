@@ -7,7 +7,29 @@ from streamlit_folium import st_folium
 from folium.plugins import HeatMap
 
 def carregar_dados(file_path):
+    def formatar_telefone(numero):
+        """
+        Formata um número de telefone para o formato (99)99999-9999 ou (99)9999-9999.
+
+        Args:
+        numero (str): Número de telefone a ser formatado.
+
+        Returns:
+        str: Número de telefone formatado.
+        """
+        numero_str = ''.join(filter(str.isdigit, str(numero)))  # Remove caracteres não numéricos
+        if len(numero_str) == 11:
+            return f"({numero_str[:2]}){numero_str[2:7]}-{numero_str[7:]}"
+        elif len(numero_str) == 10:
+            return f"({numero_str[:2]}){numero_str[2:6]}-{numero_str[6:]}"
+        else:
+            return numero  # Retorna o número original se não tiver o tamanho esperado
+
     data = pd.read_csv(file_path)
+    
+    if 'Telefone DDD' in data.columns:
+        data['Telefone DDD'] = data['Telefone DDD'].apply(formatar_telefone)
+    
     return data
 
 def verificar_colunas(data):
@@ -143,7 +165,7 @@ def gerar_tabelas_municipios(data):
     municipios = data['Cidades'].unique()
     for municipio in municipios:
         st.subheader(f"{municipio}")
-        df_municipio = data[data['Cidades'] == municipio][['Classificação no CFSD', 'Nome de Guerra', 'Telefone DDD'] if 'Telefone DDD' in data.columns else ['Classificação no CFSD', 'Nome de Guerra']]
+        df_municipio = data[data['Cidades'] == municipio][['Classificação no CFSD', 'Nome de Guerra', 'Telefone DDD', 'CNH'] if 'Telefone DDD' in data.columns else ['Classificação no CFSD', 'Nome de Guerra']]
         st.dataframe(df_municipio.set_index('Classificação no CFSD'))
 
 def gerar_tabelas_excepcionalidades(data):
@@ -153,7 +175,7 @@ def gerar_tabelas_excepcionalidades(data):
     justificativa_col = 'Justificativa' if 'Justificativa' in data.columns else next(col for col in data.columns if 'justificativa' in col.lower())
     
     # Filtrar alunos com palavras-chave nas justificativas
-    palavras_chave = ['concurso', 'efetiva', 'TDAH', 'autismo', 'doença','tdah', 'tdh']
+    palavras_chave = ['concurso', 'efetiva', 'TDH', 'autismo', 'doença']
     excepcionalidades = data[data[justificativa_col].str.contains('|'.join(palavras_chave), case=False, na=False)]
     
     # Exibir tabela
@@ -166,7 +188,7 @@ def gerar_relacao_alunos(data):
     
     st.markdown("""
     ## Excepcionalidades
-    Abaixo estão listados os militares que possuem cônjuges efetivos no município e/ou dependentes que necessitam de cuidados especiais, como TDAH e Autismo. 
+    Abaixo estão listados os militares que possuem cônjuges efetivos no município e/ou dependentes que necessitam de cuidados especiais, como TDH e Autismo. 
     """)
 
     # Verifique o nome correto da coluna de justificativas no CSV
@@ -179,7 +201,7 @@ def gerar_relacao_alunos(data):
         return
 
     # Filtrar alunos com justificativas que indicam excepcionalidades
-    palavras_chave = ['concurso', 'efetiva', 'TDAH', 'autismo', 'doença', 'tdah']
+    palavras_chave = ['concurso', 'efetiva', 'tdh', 'autismo', 'doença']
     excepcionalidades = data[data[col_justificativa].str.contains('|'.join(palavras_chave), case=False, na=False)]
     
     # Exibir tabela de excepcionalidades
@@ -192,7 +214,7 @@ def gerar_relacao_alunos(data):
     
     # Exibir tabela geral
     st.subheader("Tabela Geral de Alunos")
-    cols = ['Classificação no CFSD', 'Nome de Guerra', 'Cidades', 'Categoria CNH', 'Telefone DDD']
+    cols = ['Classificação no CFSD', 'Nome de Guerra', 'Cidades', 'Telefone DDD', 'CNH']
     cols = [col for col in cols if col in data.columns]
     st.dataframe(data[cols].set_index('Classificação no CFSD'))
 
