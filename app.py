@@ -30,6 +30,7 @@ def pagina_principal():
 # Carregar os dados
 file_path = 'escolha.csv'
 data = pd.read_csv(file_path)
+data["Nome de guerra"] = data["Nome de guerra"].str.upper()
 
 # Ajustar o nome da coluna "Justificativa "
 if "Justificativa " in data.columns:
