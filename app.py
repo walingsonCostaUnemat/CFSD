@@ -27,13 +27,12 @@ def pagina_principal():
     Use a barra lateral para navegar pelos módulos.
     """)
 
-# Carregar os dados
-file_path = 'escolha.csv'
-data = pd.read_csv(file_path)
-
-# Forçar a coluna 'Nome de Guerra' a ficar em maiúsculo
-data['Nome de Guerra'] = data['Nome de Guerra'].str.upper()
-
+def carregar_dados(file_path):
+    data = pd.read_csv(file_path)
+    # Forçar a coluna 'Nome de Guerra' a ficar em maiúsculo
+    data['Nome de Guerra'] = data['Nome de Guerra'].str.upper()
+    return data
+    
 # Ajustar o nome da coluna "Justificativa "
 if "Justificativa " in data.columns:
     data = data.rename(columns={"Justificativa ": "Justificativa"})
