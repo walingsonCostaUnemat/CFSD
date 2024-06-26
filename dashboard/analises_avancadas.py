@@ -111,9 +111,13 @@ def analise_rede(data):
 
     # Adicionando nós e arestas
     for i, row in data.iterrows():
-        G.add_node(row['Nome de Guerra'], title=row['Nome de Guerra'])
-        G.add_edge(row['Nova Categoria Graduação'], row['Nome de Guerra'])
-        G.add_edge(row['Categoria Experiência'], row['Nome de Guerra'])
+        nome_guerra = str(row['Nome de Guerra'])
+        nova_categoria_graduacao = str(row['Nova Categoria Graduação'])
+        categoria_experiencia = str(row['Categoria Experiência'])
+        
+        G.add_node(nome_guerra, title=nome_guerra)
+        G.add_edge(nova_categoria_graduacao, nome_guerra)
+        G.add_edge(categoria_experiencia, nome_guerra)
 
     # Gerar a rede usando pyvis
     net = Network(notebook=True, height="750px", width="100%", bgcolor="#ffffff", font_color="black")
@@ -132,7 +136,6 @@ def analise_rede(data):
     with open(html_file_path, 'r', encoding='utf-8') as f:
         html_content = f.read()
     components.html(html_content, height=750)
-
 
 import folium
 from streamlit_folium import st_folium
