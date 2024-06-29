@@ -154,6 +154,8 @@ def mapas_de_calor(data):
 
 def gerar_tabelas_municipios(data):
     st.header("Tabelas por Município")
+    st.markdown("A seguir será exibido a distribuição militares por munícipio. As tabelas mostram a vida acadêmica e as experiencias profissionais dos Soldados (**Graduação, Especialização, Mestrado e Doutorado** )")
+
     
     # Remover cidades do CR 1
     data = data[~data['Cidades'].str.contains('CR 1')]
@@ -161,12 +163,41 @@ def gerar_tabelas_municipios(data):
     # Ordenar por classificação
     data = data.sort_values(by='Classificação no CFSD')
     
+    # Função para substituir valores vazios por "-"
+    def substituir_vazios(valor):
+        if pd.isna(valor) or valor == "":
+            return " - "
+        return valor
+    
+    # Aplicar a função para substituir valores vazios nas colunas relevantes
+    colunas_verificar = ['Especialização', 'Doutorado', 'Mestrado', 'Outros']
+    for col in colunas_verificar:
+        if col in data.columns:
+            data[col] = data[col].apply(substituir_vazios)
+    
+    # Verificar se pelo menos uma célula não está vazia
+    def verificar_colunas(data, cols):
+        for col in cols:
+            if col in data.columns and data[col].str.strip().any():
+                return True
+        return False
+    
     # Exibir tabelas por município
     municipios = data['Cidades'].unique()
     for municipio in municipios:
         st.subheader(f"{municipio}")
-        df_municipio = data[data['Cidades'] == municipio][['Classificação no CFSD', 'Nome de Guerra', 'Telefone DDD', 'CNH'] if 'Telefone DDD' in data.columns else ['Classificação no CFSD', 'Nome de Guerra']]
-        st.dataframe(df_municipio.set_index('Classificação no CFSD'))
+        if verificar_colunas(data[data['Cidades'] == municipio], colunas_verificar):
+            cols = ['Nome de Guerra', 'Telefone DDD', 'CNH', 'Graduação', 'Especialização', 'Mestrado', 'Doutorado', 'Outros']
+        else:
+            cols = ['Nome de Guerra', 'Telefone DDD', 'CNH', 'Graduação', 'Especialização']
+        
+        df_municipio = data[data['Cidades'] == municipio][cols]
+        
+        # Quebrar texto longo nas células
+        styled_df = df_municipio.style.set_properties(**{'white-space': 'pre-wrap'})
+        
+        st.dataframe(styled_df)
+
 
 def gerar_tabelas_excepcionalidades(data):
     #st.header("Excepcionalidades")
